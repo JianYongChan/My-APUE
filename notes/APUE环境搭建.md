@@ -1,6 +1,6 @@
 # 缘起
 
-今天(2018-7-7)开始学习[APUE-src](http://www.apuebook.com/apue3e.html)，首先得把环境搭建起来。
+今天(2018-7-7)开始学习[APUE](http://www.apuebook.com/apue3e.html)，首先得把环境搭建起来。
 
 ## 环境搭建
 
