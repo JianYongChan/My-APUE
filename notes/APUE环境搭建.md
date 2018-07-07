@@ -1,6 +1,6 @@
 # 缘起
 
-今天(2018-7-7)开始学习`APUE`，首先得把环境搭建起来。
+今天(2018-7-7)开始学习[APUE-src](http://www.apuebook.com/apue3e.html)，首先得把环境搭建起来。
 
 ## 环境搭建
 
@@ -28,20 +28,23 @@ sudo cp ./lib/libapue.a /usr/local/lib/
 #include "apue.h"
 #include <dirent.h>
 
-int
-main(int argc, char const *argv[]) {
-DIR             *dp;
-struct  dirent  *dirp;
+int main(int argc, char *argv[]) {
+    DIR           *dp;
+    struct dirent *dirp;
 
-if (argc != 2)
-    err_quit("eeee");
-if ((dp = opendir(argv[1])) == NULL)
-    err_sys("can't open %s", argv[1]);
-while ((dirp = readdir(dp)) != NULL)
-    printf("%s\n", dirp->d_name);
+    if (argc != 2) {
+        err_quit("usage: ls directory_name");
+    }
 
-closedir(dp);
-exit(0);
+    if ((dp = opendir(argv[1])) == NULL) {
+        err_sys("cannot open %s", argv[1]);
+    }
+    while ((dirp = readdir(dp)) != NULL) {
+        printf("%s\n", dirp->d_name);
+    }
+
+    closedir(dp);
+    exit(0);
 }
 ```
 
