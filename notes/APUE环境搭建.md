@@ -50,5 +50,5 @@ int main(int argc, char *argv[]) {
 
 ``` shell
 gcc -o exe -lapue
-./exe
+./exe /dev
 ```
