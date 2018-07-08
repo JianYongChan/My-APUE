@@ -16,6 +16,7 @@ int main() {
     }
     /* offset now = 10 */
 
+    // `SEEK_SET`表示将偏移位置设置为距文件开始位置offset个字节处
     if (lseek(fd, 16384, SEEK_SET) == -1) {
         err_sys("lseek error");
     }
