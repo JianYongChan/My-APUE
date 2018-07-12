@@ -26,5 +26,6 @@ void clr_fl(int fd, int flags) {
 
     if (fcntl(fd, F_GETFL, val) < 0) {
         err_sys("fcntl F_SETFL error");
+    }
 
 }
