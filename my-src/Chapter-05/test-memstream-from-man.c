@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     }
 
     // argv[1]是一连串数字，空格分隔
+    // 以argv[1]作为内存流缓冲区
     in = fmemopen(argv[1], strlen(argv[1]), "r");
     if (in == NULL)
         handle_error("fmemopen");
@@ -45,6 +46,7 @@ int main(int argc, char *argv[]) {
 
     printf("size = %zu; ptr = %s\n", size, ptr);
 
+    // open_memstream创建的流需要自行释放缓冲区
     free(ptr);
     exit(EXIT_SUCCESS);
 }
