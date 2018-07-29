@@ -13,14 +13,17 @@
 #include <pwd.h>
 #include <stddef.h>
 #include <string.h>
-struct passwd* mygetpwnam(const char *name
-) {    struct passwd *ptr;
+struct passwd* mygetpwnam(const char *name) {
+    struct passwd *ptr;
+
     setpwent();
-    while((ptr = getpwent()) != NULL) {        if (strcmp(name, ptr->pw_name) ==
-0) {
+    while((ptr = getpwent()) != NULL) {
+        if (strcmp(name, ptr->pw_name) == 0) {
             break;
-        }    }
+        }
+    }
     endpwent();
+
     return(ptr);
 }
 
