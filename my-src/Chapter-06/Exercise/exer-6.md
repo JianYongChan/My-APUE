@@ -75,7 +75,7 @@ int main(void) {
 * 编程获取当前时间，并使用`strftime`将输出结果转换为类似于`date(1)`命令的默认输出。将环境变量`TZ`设置为不同值，观察输出结果。
 
 ``` C
-#include "apue.h"                     5.c -lapue
+#include "apue.h"
 #include <time.h>
 
 int main() {
