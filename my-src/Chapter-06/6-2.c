@@ -33,6 +33,5 @@ int main(int argc, char *argv[]) {
         printf("comment: %s\n", ptr->pw_gecos);
         printf("home: %s\n", ptr->pw_dir);
         printf("shell: %s\n", ptr->pw_shell);
-
     }
 }
