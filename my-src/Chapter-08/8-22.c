@@ -13,8 +13,13 @@ int mysystem(const char *cmdstring) {
     if ((pid = fork()) < 0) {
         status = -1;
     } else if (pid == 0) { /* 子进程 */
+        /* -c选项告诉shell程序读取下一个命令行参数(此处为cmdstring)作为命令输入
+         * 而不是从标准输入或从一个给定的文件中读命令
+         */
         execl("/bin/sh", "sh", "-c", cmdstring, (char*)0);
-        /* 为什么用_exit不用exit？*/
+        /* 用_exit而不用exit，
+         * 是为了防止任一标准I/O缓冲(这些缓冲会在fork中由父进程复制到子进程)在子进程中被冲洗
+         */
         _exit(127);
     } else {
         while (waitpid(pid, &status, 0) < 0) {
