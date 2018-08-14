@@ -11,7 +11,7 @@ Sigfunc *my_signal(int signo, Sigfunc *func) {
     sigemptyset(&act.sa_mask); // 必须用sigemptyset初始化，因为act.sa_mask并不保证它做同样的事情
     act.sa_flags = 0;
     /*
-     * 对SIGALRM以外的信号都设置SA_RESTATb标志，
+     * 对SIGALRM以外的信号都设置SA_RESTAT标志，
      * 如此以来，被这些信号中断的系统调用都能自动重启动
      * 而不对SIGALRM设置SA_RESTART标志的原因是，
      * 我们希望能够使用SIGALRM对I/O操作设置时间限制
