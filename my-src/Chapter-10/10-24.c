@@ -16,7 +16,7 @@ static void sig_usr(int signo) {
     sigflag = -1;
 }
 
-void TIME_WAIT(void) {
+void TELL_WAIT(void) {
     if (signal(SIGUSR1 , sig_usr) == SIG_ERR)
         err_sys("signal(SIGUSR1) error");
     if (signal(SIGUSR2, sig_usr) == SIG_ERR)
@@ -54,6 +54,10 @@ void TELL_CHILD(pid_t pid) {
 }
 
 void WAIT_CHILD(void) {
+    /*
+     * 暂时解除对SIGUSR1，SIGUSR2对阻塞
+     * 并使进程挂起，知道sigflag为1
+     */
     while (sigflag == 0)
         sigsuspend(&zeromask);
     sigflag = 0;
