@@ -22,7 +22,7 @@ main(int argc, char *argv[]) {
 
     if ((pid = fork()) < 0) {
         err_sys("fork error");
-    } else if (pid > 0) {
+    } else if (pid > 0) { /* 父进程 */
         close(fd[0]); // 父进程关闭读端
 
         /* 将argv[1]表示的文件的内容写入管道 */
@@ -39,7 +39,7 @@ main(int argc, char *argv[]) {
             err_sys("waitpid error");
 
         exit(0);
-    } else {
+    } else { /* 子进程 */
         close(fd[1]); // 子进程关闭写端
         /*
          * 这里将fd[0]复制到标准输入
@@ -59,7 +59,7 @@ main(int argc, char *argv[]) {
             pager = DEF_PAGER;
         // strrchr定位到'/'最后一次出现的位置
         // 没有出现则返回NULL
-        if ((argv[0] = strrchr(pager, '/')) != NULL)
+        if ((argv0 = strrchr(pager, '/')) != NULL)
             argv0++; // 跳过最后一个斜杠(路径分隔符)
         else
             argv0 = pager; // 没有斜杠
