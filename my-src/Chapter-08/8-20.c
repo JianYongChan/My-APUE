@@ -7,9 +7,9 @@ int main(void) {
     if ((pid = fork()) < 0) {
         err_sys("fork error");
     } else if (pid == 0) { /* 子进程 */
-        if (execl("/home/ctom/ilinux/study/readbooks/APUE/my-src/Chapter-08/testinterp",
+        if (execl("/Users/tangmou/ilinux/readbooks/APUE/my-src/Chapter-08/testinterp",
                     "testinterp",
-                    "myarg1"
+                    "myarg1",
                     "MY ARG2",
                     (char*)0) < 0)
             err_sys("execl error");
