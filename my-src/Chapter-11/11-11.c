@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include "apue.h"
 #include <pthread.h>
 
 #define NHASH 29
@@ -65,7 +65,10 @@ foo_find(int id) {
     return fp;
 }
 
-void
+/*
+ * 返回0表示释放了对象，-1表示没有
+ */
+int
 foo_release(struct foo *fp) {
     struct foo *tfp;
     int        idx;
@@ -87,7 +90,7 @@ foo_release(struct foo *fp) {
             fp->f_count--;
             pthread_mutex_unlock(&fp->f_lock);
             pthread_mutex_unlock(&hashlock);
-            return;
+            return -1; /* 由于引用计数没有递减到0，所以不删除 */
         }
         /* 从hash表中删除结构 */
         idx = HASH(fp->f_id);
@@ -103,10 +106,71 @@ foo_release(struct foo *fp) {
         pthread_mutex_unlock(&fp->f_lock);
         pthread_mutex_destroy(&fp->f_lock);
         free(fp);
+        return 0;
     } else { /* 引用计数不会减少至0，无需释放对象内存 */
         fp->f_count--;
         pthread_mutex_unlock(&fp->f_lock);
+        return -1;
     }
 }
 
 
+void *
+thr_fn1(void *arg) {
+    struct foo *fp;
+    int ret;
+
+    fp = foo_find(7);
+    if (fp == NULL) {
+        printf("thread-1 cannot find foo(7)\n");
+    } else {
+        printf("thread-1 found foo(7)\n");
+    }
+    ret = foo_release(fp);
+    if (ret == 0)
+        printf("thread-1 release foo of id 7\n");
+    else
+        printf("thread-1 cannot release foo of id 7\n");
+
+    return (void*)1;
+}
+
+void *
+thr_fn2(void *arg) {
+    struct foo *fp;
+    int ret;
+
+    fp = foo_find(7);
+    if (fp == NULL) {
+        printf("thread-2 cannot find foo(7)\n");
+    } else {
+        printf("thread-2 found foo(7)\n");
+    }
+    ret = foo_release(fp);
+    if (ret == 0)
+        printf("thread-2 release foo of id 7\n");
+    else
+        printf("thread-2 cannot release foo of id 7\n");
+
+    return (void*)2;
+}
+
+int
+main(void) {
+    int       err;
+    pthread_t tid1, tid2;
+
+    foo_alloc(1);
+    foo_alloc(2);
+    foo_alloc(2);
+    foo_alloc(7);
+
+    err = pthread_create(&tid1, NULL, thr_fn1, NULL);
+    if (err != 0)
+        err_exit(err, "cannot create pthread-1");
+
+    err = pthread_create(&tid2, NULL, thr_fn2, NULL);
+    if (err != 0)
+        err_exit(err, "cannot create pthread-2");
+
+}

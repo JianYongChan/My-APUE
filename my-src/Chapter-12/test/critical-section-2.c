@@ -2,7 +2,7 @@
 #include <pthread.h>
 
 static int glob = 0;
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 static void *
 thr_fn(void *arg) {
