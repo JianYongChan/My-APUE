@@ -18,6 +18,9 @@ serv_listen(const char *name) {
     if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
         return -2;
 
+    // 当我们试图绑定同一地址时，如果套接字文件已经存在，则bind请求会失败
+    // 而且关闭套接字时并不会自动删除该文件
+    // 所以我们必须确保在应用程序退出前，对该文件执行解除链接操作
     unlink(name);
 
     // 注意不需要设置某些平台提供的sun_len字段
