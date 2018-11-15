@@ -16,6 +16,8 @@ getpass(const char *prompt) {
     FILE            *fp;
     int             c;
 
+    // 只是读、写控制终端
+    // 如果不能以读、写模式打开次设备则出错返回
     if ((fp = fopen(ctermid(NULL), "r+")) == NULL)
         return NULL;
     // 使用标准I/O读、写控制终端
@@ -30,11 +32,11 @@ getpass(const char *prompt) {
     sigaddset(&sig, SIGTSTP);
     sigprocmask(SIG_BLOCK, &sig, &osig); // 注意保存旧的sigset
 
-    tcgetattr(fileno(fp), &ts);
+    tcgetattr(fileno(fp), &ts); // 获取终端属性
     ots = ts; // 保存旧的属性值
     ts.c_lflag &= ~(ECHO | ECHOE | ECHOK | ECHONL); // 禁止回显
-    tcsetattr(fileno(fp), TCSAFLUSH, &ts);
-    fputs(prompt, fp);
+    tcsetattr(fileno(fp), TCSAFLUSH, &ts); // 对终端设置新的属性
+    fputs(prompt, fp); // 显示提示符
 
     ptr = buf;
     while ((c = getc(fp)) != EOF && c != '\n')
